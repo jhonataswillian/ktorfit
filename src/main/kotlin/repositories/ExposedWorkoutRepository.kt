@@ -3,9 +3,8 @@ package com.example.repositories
 import com.example.database.Workouts
 import com.example.models.Workout
 import kotlinx.coroutines.Dispatchers
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
 class ExposedWorkoutRepository : WorkoutRepository {
@@ -36,7 +35,29 @@ class ExposedWorkoutRepository : WorkoutRepository {
         workout.copy(id = id)
     }
 
-    override suspend fun workoutById(id: Int): Workout? = null
-    override suspend fun deleteWorkout(id: Int): Boolean = false
-    override suspend fun updateWorkout(id: Int, workout: Workout): Boolean = false
+    override suspend fun workoutById(id: Int): Workout? = dbQuery {
+        Workouts
+            .selectAll()
+            .where { Workouts.id eq id}
+            .map { resultRowToWorkout(it) }
+            .singleOrNull()
+    }
+
+    override suspend fun deleteWorkout(id: Int): Boolean = dbQuery {
+        val rowsDeleted = Workouts.deleteWhere { Workouts.id eq id }
+
+        rowsDeleted > 0
+    }
+
+    override suspend fun updateWorkout(id: Int, workout: Workout): Boolean = dbQuery {
+
+        val rowsUpdate = Workouts.update({ Workouts.id eq id }) {
+
+            it[name] = workout.name
+            it[description] = workout.description
+            it[durationMinutes] = workout.durationMinutes
+        }
+
+        rowsUpdate > 0
+    }
 }
