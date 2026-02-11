@@ -27,7 +27,7 @@
 ### Running the Application
 1.  Clone the repository:
     ```bash
-    git clone https://github.com/YOUR_USERNAME/ktorfit.git
+    https://github.com/jhonataswillian/kot-lift
     ```
 2.  Open the project in IntelliJ IDEA.
 3.  Run the `Application.kt` file or execute via Gradle:
