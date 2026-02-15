@@ -53,5 +53,4 @@ fun Route.exerciseRoutes(repository: ExerciseRepository) {
             call.respond(HttpStatusCode.OK, exercises)
         }
     }
-
 }
