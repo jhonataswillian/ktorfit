@@ -16,7 +16,8 @@ class ExposedWorkoutRepository : WorkoutRepository {
         id = row[Workouts.id],
         name = row[Workouts.name],
         description = row[Workouts.description],
-        durationMinutes = row[Workouts.durationMinutes]
+        durationMinutes = row[Workouts.durationMinutes],
+        date = row[Workouts.date]
     )
 
     override suspend fun allWorkouts(): List<Workout> = dbQuery {
@@ -28,6 +29,7 @@ class ExposedWorkoutRepository : WorkoutRepository {
             it[name] = workout.name
             it[description] = workout.description
             it[durationMinutes] = workout.durationMinutes
+            it[date] = workout.date
         }
 
         val id = insertStatement[Workouts.id]
@@ -56,8 +58,8 @@ class ExposedWorkoutRepository : WorkoutRepository {
             it[name] = workout.name
             it[description] = workout.description
             it[durationMinutes] = workout.durationMinutes
+            it[date] = workout.date
         }
-
         rowsUpdate > 0
     }
 }

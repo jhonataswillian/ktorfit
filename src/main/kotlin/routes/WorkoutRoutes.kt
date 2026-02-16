@@ -1,5 +1,7 @@
 package com.example.routes
 
+import com.example.dto.CreateWorkoutRequest
+import com.example.dto.toModel
 import com.example.models.Workout
 import com.example.repositories.WorkoutRepository
 import io.ktor.http.*
@@ -19,9 +21,8 @@ fun Route.workoutRoutes(repository: WorkoutRepository) {
 
         post {
             try {
-                val workout = call.receive<Workout>()
-
-                val newWorkout = repository.addWorkout(workout)
+                val workout = call.receive<CreateWorkoutRequest>()
+                val newWorkout = repository.addWorkout(workout.toModel())
 
                 call.respond(HttpStatusCode.Created, newWorkout)
             } catch (e: Exception) {
@@ -30,20 +31,18 @@ fun Route.workoutRoutes(repository: WorkoutRepository) {
             }
         }
 
-        // === ROTAS ESPECÍFICAS (/workouts/{id} ===
+        // === ROTAS ESPECÍFICAS (/workouts/{id}) ===
         route("/{id}") {
 
             // === GET por ID ===
             get {
                 val id = call.parameters["id"]?.toIntOrNull()
-
                 if (id == null) {
                     call.respond(HttpStatusCode.BadRequest, "Invalid ID format. Must be an integer.")
                     return@get
                 }
 
                 val  workout = repository.workoutById(id)
-
                 if (workout != null) {
                     call.respond(HttpStatusCode.OK, workout)
                 } else {
@@ -54,14 +53,12 @@ fun Route.workoutRoutes(repository: WorkoutRepository) {
             // === DELETE por ID ===
             delete {
                 val id = call.parameters["id"]?.toIntOrNull()
-
                 if (id == null) {
                     call.respond(HttpStatusCode.BadRequest, "Invalid ID")
                     return@delete
                 }
 
                 val deleted = repository.deleteWorkout(id)
-
                 if (deleted) {
                     call.respond(HttpStatusCode.NoContent)
                 } else {
