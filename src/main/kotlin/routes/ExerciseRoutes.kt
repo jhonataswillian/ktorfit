@@ -1,6 +1,7 @@
 package com.example.routes
 
-import com.example.models.Exercise
+import com.example.dto.CreateExerciseRequest
+import com.example.dto.toModel
 import com.example.repositories.ExerciseRepository
 import io.ktor.http.*
 import io.ktor.server.request.*
@@ -11,12 +12,11 @@ import io.ktor.server.routing.*
 fun Route.exerciseRoutes(repository: ExerciseRepository) {
 
     route("/exercises") {
-
         // Criar Exercício
         post {
             try {
-                val exercise = call.receive<Exercise>()
-                val newExercise = repository.addExercise(exercise)
+                val exercise = call.receive<CreateExerciseRequest>()
+                val newExercise = repository.addExercise(exercise.toModel())
                 call.respond(HttpStatusCode.Created, newExercise)
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.BadRequest,

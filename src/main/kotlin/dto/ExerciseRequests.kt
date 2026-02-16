@@ -1,4 +1,4 @@
-package com.example.dtos
+package com.example.dto
 
 import com.example.models.Exercise
 import kotlinx.serialization.Serializable
@@ -10,7 +10,7 @@ data class CreateExerciseRequest(
     val sets: Int,
     val reps: Int,
     val workoutId: Int
-)
+) {}
 
 fun CreateExerciseRequest.toModel(): Exercise {
     return Exercise(
