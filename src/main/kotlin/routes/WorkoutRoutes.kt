@@ -20,15 +20,10 @@ fun Route.workoutRoutes(repository: WorkoutRepository) {
 
 
         post {
-            try {
-                val workout = call.receive<CreateWorkoutRequest>()
-                val newWorkout = repository.addWorkout(workout.toModel())
+            val workout = call.receive<CreateWorkoutRequest>()
+            val newWorkout = repository.addWorkout(workout.toModel())
+            call.respond(HttpStatusCode.Created, newWorkout)
 
-                call.respond(HttpStatusCode.Created, newWorkout)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                call.respond(HttpStatusCode.BadRequest, "Detailed Error: ${e.localizedMessage}")
-            }
         }
 
         // === ROTAS ESPECÍFICAS (/workouts/{id}) ===

@@ -23,8 +23,12 @@ dependencies {
     implementation(libs.exposed.jdbc)
     implementation(libs.ktor.server.call.logging)
     implementation(libs.ktor.server.netty)
+    implementation("io.ktor:ktor-server-host-common:3.4.0")
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
+
+
+    implementation("io.ktor:ktor-server-status-pages:3.4.0")
 
     // Suporte a datas modernas do Kotlin no Banco de Dados
     implementation("org.jetbrains.exposed:exposed-kotlin-datetime:0.58.0")

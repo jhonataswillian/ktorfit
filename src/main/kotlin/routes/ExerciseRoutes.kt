@@ -14,14 +14,9 @@ fun Route.exerciseRoutes(repository: ExerciseRepository) {
     route("/exercises") {
         // Criar Exercício
         post {
-            try {
-                val exercise = call.receive<CreateExerciseRequest>()
-                val newExercise = repository.addExercise(exercise.toModel())
-                call.respond(HttpStatusCode.Created, newExercise)
-            } catch (e: Exception) {
-                call.respond(HttpStatusCode.BadRequest,
-                    "Error creating exercise: ${e.localizedMessage} ")
-            }
+            val exercise = call.receive<CreateExerciseRequest>()
+            val newExercise = repository.addExercise(exercise.toModel())
+            call.respond(HttpStatusCode.Created, newExercise)
         }
 
         // Deletar Exercício
