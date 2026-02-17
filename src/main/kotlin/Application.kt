@@ -9,6 +9,7 @@ import com.example.repositories.ExposedExerciseRepository
 import com.example.repositories.ExposedWorkoutRepository
 import com.example.routes.exerciseRoutes
 import com.example.routes.workoutRoutes
+import com.example.services.WorkoutService
 import io.ktor.server.application.*
 import io.ktor.server.routing.routing
 
@@ -24,10 +25,12 @@ fun Application.module() {
     configureStatusPages()
 
     val workoutRepository = ExposedWorkoutRepository()
+    val workoutService = WorkoutService(workoutRepository)
+
     val exerciseRepository = ExposedExerciseRepository()
 
     routing {
-        workoutRoutes(workoutRepository)
+        workoutRoutes(workoutService)
         exerciseRoutes(exerciseRepository)
     }
 }
