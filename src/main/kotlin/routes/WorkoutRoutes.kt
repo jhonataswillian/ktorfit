@@ -43,6 +43,17 @@ fun Route.workoutRoutes(service: WorkoutService) {
                 }
             }
 
+            get("/report") {
+                val id = call.parameters["id"]?.toIntOrNull()
+                if (id == null) {
+                    call.respond(HttpStatusCode.BadRequest, "ID Inválido")
+                    return@get
+                }
+
+                val report = service.generateReport(id)
+                call.respond(HttpStatusCode.OK, report)
+            }
+
             // === DELETE por ID ===
             delete {
                 val id = call.parameters["id"]?.toIntOrNull()

@@ -22,9 +22,9 @@ fun Application.module() {
     configureStatusPages()
 
     val workoutRepository = ExposedWorkoutRepository()
-    val workoutService = WorkoutService(workoutRepository)
-
     val exerciseRepository = ExposedExerciseRepository()
+
+    val workoutService = WorkoutService(workoutRepository, exerciseRepository)
     val exerciseService = ExerciseService(exerciseRepository)
 
     routing {

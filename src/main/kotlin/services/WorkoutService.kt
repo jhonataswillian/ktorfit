@@ -1,11 +1,16 @@
 package com.example.services
 
 import com.example.dto.CreateWorkoutRequest
+import com.example.dto.WorkoutReport
 import com.example.dto.toModel
 import com.example.models.Workout
+import com.example.repositories.ExerciseRepository
 import com.example.repositories.WorkoutRepository
 
-class WorkoutService(private val repository: WorkoutRepository) {
+class WorkoutService(
+    private val repository: WorkoutRepository,
+    private val exerciseRepository: ExerciseRepository
+) {
 
     suspend fun create(request: CreateWorkoutRequest): Workout {
         validateRequest(request)
@@ -36,5 +41,21 @@ class WorkoutService(private val repository: WorkoutRepository) {
         if (request.durationMinutes < 5) {
             throw IllegalArgumentException("A duração deve ser de pelo menos 5 minutos")
         }
+    }
+
+    suspend fun generateReport(workoutId: Int): WorkoutReport {
+
+        val workout = repository.workoutById(workoutId)
+            ?: throw IllegalArgumentException("Treino não encontrado")
+
+        val exercises = exerciseRepository.exercisesByWorkout(workoutId)
+
+        val totalVolume = exercises.sumOf { it.weight * it.sets * it.reps }
+
+        return WorkoutReport(
+            workoutId = workout.id!!,
+            totalVolume = totalVolume,
+            exerciseCount = exercises.size
+        )
     }
 }
