@@ -8,7 +8,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 fun Application.configureDatabases() {
     val database = Database.connect(
-        url = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
+        url = "jdbc:h2:file:./build/db",
         user = "root",
         driver = "org.h2.Driver",
         password = "",
