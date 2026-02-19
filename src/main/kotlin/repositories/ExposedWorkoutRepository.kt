@@ -20,8 +20,11 @@ class ExposedWorkoutRepository : WorkoutRepository {
         date = row[Workouts.date]
     )
 
-    override suspend fun allWorkouts(): List<Workout> = dbQuery {
-        Workouts.selectAll().map { resultRowToWorkout(it) }
+    override suspend fun allWorkouts(limit: Int, offset: Long): List<Workout> = dbQuery {
+        Workouts
+            .selectAll()
+            .limit(count = limit).offset(start = offset)
+            .map { resultRowToWorkout(it) }
     }
 
     override suspend fun addWorkout(workout: Workout): Workout = dbQuery {

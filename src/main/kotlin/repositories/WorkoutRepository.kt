@@ -4,7 +4,7 @@ import com.example.models.Workout
 
 interface WorkoutRepository {
 
-    suspend fun allWorkouts(): List<Workout>
+    suspend fun allWorkouts(limit: Int, offset: Long): List<Workout>
 
     suspend fun workoutById(id: Int): Workout?
 
