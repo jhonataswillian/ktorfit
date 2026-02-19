@@ -20,7 +20,7 @@ class WorkoutService(
 
     suspend fun findAll(page: Int = 1, limit: Int = 10): List<Workout> {
         require(page > 0) { "A página deve ser maior que zero" }
-        require(limit in 1..100) { "O limite deve estar entre 1 e 100 "}
+        require(limit in 1..100) { "O limite deve estar entre 1 e 100" }
 
         val offset = ((page - 1) * limit).toLong()
         return repository.allWorkouts(limit, offset)
