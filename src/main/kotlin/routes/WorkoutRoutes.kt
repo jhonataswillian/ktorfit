@@ -12,7 +12,10 @@ fun Route.workoutRoutes(service: WorkoutService) {
 
         // === ROTAS GERAIS (/workouts) ===
         get {
-            val workouts = service.findAll()
+            val page = call.request.queryParameters["page"]?.toIntOrNull() ?: 1
+            val limit = call.request.queryParameters["limit"]?.toIntOrNull() ?: 10
+
+            val workouts = service.findAll(page, limit)
             call.respond(HttpStatusCode.OK, workouts)
         }
 
